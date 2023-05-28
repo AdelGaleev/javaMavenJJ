@@ -6,18 +6,18 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class PersonApi {
     public static Person getPersonFromApi() {
 
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder().
-                uri(URI.create("https://randomuser.me/api")).
-                GET().
-                build();
-
+        HttpRequest request = HttpRequest.newBuilder().GET().
+                uri(URI.create("https://randomuser.me/api")).build();
         try {
              HttpResponse<String> responcex = client.send(request, HttpResponse.BodyHandlers.ofString());
+
              Person person =  parseJsonToPerson(responcex);
              return person;
         } catch (Exception e) {
@@ -34,9 +34,11 @@ public class PersonApi {
         res.setName(object.getJSONObject("name").getString("first"));
         res.setLastName(object.getJSONObject("name").getString("last"));
         res.setCountry(object.getJSONObject("location").getString("country"));
-        //res.setDob(object.getJSONObject();
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss en");
+        //LocalDateTime dobbey = LocalDateTime.parse(object.getJSONObject("dob").getString("date"), formatter);
+        //res.setDob(dobbey);
         res.setUsername(object.getJSONObject("login").getString("username"));
-        res.setPassword(object.getJSONObject("word").getString("password"));
+        res.setPassword(object.getJSONObject("login").getString("password"));
 // заполнить остальные поля
         return res;
     }

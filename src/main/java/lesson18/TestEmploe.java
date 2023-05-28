@@ -1,2 +1,7 @@
-package lesson18;public class TestEmploe {
+package lesson18;
+
+public class TestEmploe {
+    public TestEmploe() {
+    }
+
 }
