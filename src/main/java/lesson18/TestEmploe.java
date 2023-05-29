@@ -1,7 +1,9 @@
 package lesson18;
 
-public class TestEmploe {
+public class TestEmploe extends Emploe {
     public TestEmploe() {
     }
-
+    public TestEmploe(String name, int age) {
+        super(name, age);
+    }
 }

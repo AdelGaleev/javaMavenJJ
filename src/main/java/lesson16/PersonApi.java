@@ -7,7 +7,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PersonApi {
     public static Person getPersonFromApi() {
@@ -34,12 +37,76 @@ public class PersonApi {
         res.setName(object.getJSONObject("name").getString("first"));
         res.setLastName(object.getJSONObject("name").getString("last"));
         res.setCountry(object.getJSONObject("location").getString("country"));
-        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss en");
-        //LocalDateTime dobbey = LocalDateTime.parse(object.getJSONObject("dob").getString("date"), formatter);
-        //res.setDob(dobbey);
+        LocalDateTime dob =
+                ZonedDateTime.parse(object.getJSONObject("dob").
+                        getString("date")).toLocalDateTime();
+        res.setDob(dob);
         res.setUsername(object.getJSONObject("login").getString("username"));
         res.setPassword(object.getJSONObject("login").getString("password"));
 // заполнить остальные поля
+        return res;
+    }
+    public static List<Person> getPersonFromApi(int count) {
+
+        List<Person> persons = new ArrayList<>();
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder().GET().
+                uri(URI.create("https://randomuser.me/api")).build();
+        try {
+            for (int i = 0; i < count; i++) {
+                HttpResponse<String> responcex = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                Person person = parseJsonToPerson(responcex);
+                persons.add(person);
+            }
+                return persons;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static List<Person> getPersons (int count) {
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.
+                newBuilder().
+                GET().
+                uri(URI.create(String.format("https://randomuser.me/api?results=%d", count))).build();
+        try {
+            HttpResponse<String> responcex = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            List<Person> persons = jsonParser(responcex);
+            return persons;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public static List<Person> jsonParser(HttpResponse<String> response) {
+
+        List<Person> res = new ArrayList<>();
+        int count = new JSONObject(response.body()).getJSONObject("info").
+                getInt("results");
+
+        for (int i = 0; i < count; i++) {
+            JSONObject object = new JSONObject(response.body()).
+                    getJSONArray("results").getJSONObject(i);
+
+            Person person = new Person();
+            person.setName(object.getJSONObject("name").getString("first"));
+            person.setLastName(object.getJSONObject("name").getString("last"));
+            person.setCountry(object.getJSONObject("location").getString("country"));
+            LocalDateTime dob =
+                    ZonedDateTime.parse(object.getJSONObject("dob").
+                            getString("date")).toLocalDateTime();
+            person.setDob(dob);
+            person.setUsername(object.getJSONObject("login").getString("username"));
+            person.setPassword(object.getJSONObject("login").getString("password"));
+
+            res.add(person);
+        }
         return res;
     }
 }
