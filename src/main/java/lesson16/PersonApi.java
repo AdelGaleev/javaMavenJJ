@@ -11,6 +11,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class PersonApi {
     public static Person getPersonFromApi() {
@@ -43,6 +44,8 @@ public class PersonApi {
         res.setDob(dob);
         res.setUsername(object.getJSONObject("login").getString("username"));
         res.setPassword(object.getJSONObject("login").getString("password"));
+        res.setAge(object.getJSONObject("dob").getInt("age"));
+        res.setGender(object.getString("gender"));
 // заполнить остальные поля
         return res;
     }
@@ -104,8 +107,10 @@ public class PersonApi {
             person.setDob(dob);
             person.setUsername(object.getJSONObject("login").getString("username"));
             person.setPassword(object.getJSONObject("login").getString("password"));
-
+            person.setAge(object.getJSONObject("dob").getInt("age"));
+            person.setGender(object.getString("gender"));
             res.add(person);
+
         }
         return res;
     }

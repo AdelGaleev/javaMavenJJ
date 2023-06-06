@@ -9,6 +9,8 @@ public class Person {
     private LocalDateTime dob;
     private String username;
     private String password;
+    private int age;
+    private String gender;
 
     public Person() {
     }
@@ -20,6 +22,24 @@ public class Person {
         this.dob = dob;
         this.username = username;
         this.password = password;
+        this.age = age;
+        this.gender = gender;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getName() {
@@ -77,12 +97,14 @@ public class Person {
 
         Person person = (Person) o;
 
+        if (age != person.age) return false;
         if (name != null ? !name.equals(person.name) : person.name != null) return false;
         if (lastName != null ? !lastName.equals(person.lastName) : person.lastName != null) return false;
         if (country != null ? !country.equals(person.country) : person.country != null) return false;
         if (dob != null ? !dob.equals(person.dob) : person.dob != null) return false;
         if (username != null ? !username.equals(person.username) : person.username != null) return false;
-        return password != null ? password.equals(person.password) : person.password == null;
+        if (password != null ? !password.equals(person.password) : person.password != null) return false;
+        return gender != null ? gender.equals(person.gender) : person.gender == null;
     }
 
     @Override
@@ -93,6 +115,8 @@ public class Person {
         result = 31 * result + (dob != null ? dob.hashCode() : 0);
         result = 31 * result + (username != null ? username.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + age;
+        result = 31 * result + (gender != null ? gender.hashCode() : 0);
         return result;
     }
 
@@ -105,6 +129,10 @@ public class Person {
                 ", dob=" + dob +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", age=" + age +
+                ", gender='" + gender + '\'' +
                 '}';
     }
+
 }
+
