@@ -2,7 +2,7 @@ package lesson16;
 
 import java.time.LocalDateTime;
 
-public class Person {
+public class Person implements Comparable<Person> {
     private String name;
     private String lastName;
     private String country;
@@ -134,5 +134,15 @@ public class Person {
                 '}';
     }
 
+    @Override
+    public int compareTo(Person o) {
+        if(!this.getName().equals(this.getName()))
+            return this.getName().compareTo(this.getName());
+        if(!this.getLastName().equals(this.getLastName()))
+            return this.getLastName().compareTo(this.getLastName());
+        if(!this.gender.equals(this.gender))
+            return this.gender.compareTo(this.gender);
+        return 0;
+    }
 }
 

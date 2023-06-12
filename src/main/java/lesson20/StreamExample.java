@@ -3,6 +3,7 @@ package lesson20;
 import lesson16.Person;
 import lesson16.PersonApi;
 import lesson18.TestEmploe;
+import org.w3c.dom.ls.LSOutput;
 
 import java.util.Comparator;
 import java.util.List;
@@ -33,18 +34,20 @@ public class StreamExample {
 //                .thenComparing(Person::getGender))
                 .collect(Collectors.toList())
                 .forEach(System.out::println);
+
         System.out.println();
         System.out.println("=======================================================");
         // найти мужчин младше 18 лет и вывести значение в виде ФИО дата рождения
         // (пример Мухаметов дамир шокирович 01.01.2222)
         //здесь я поднял возраст до 30, потому что до 18 лет почти не выдает результаты
         personFromApi.stream()
-                .filter(person -> (person.getAge() < 30))
-                .filter(person -> (person.getGender().equals("male")))
+                .filter(person -> person.getAge() < 30 && person.getGender().equals("male"))
+                .map(person -> person.getName() + " " + person.getLastName() + " " + person.getDob().toString())
                 .collect(Collectors.toList());
-        for (Person person : personFromApi) {
-            System.out.println(person.getName() + " " + person.getLastName() + " " + person.getDob());
-        }
+
+//        for (Person person : personFromApi) {
+//            System.out.println(person.getName() + " " + person.getLastName() + " " + person.getDob());
+//        }
         System.out.println();
         System.out.println("=======================================================");
 
@@ -60,7 +63,7 @@ public class StreamExample {
 
         //вывести всех у кого Длина фио меньше 30 символов
 
-        personFromApi.stream()
+        personFromApi.stream().parallel()
                 .filter(person -> (person.getName().length() + person.getLastName().length()) < 30)
                 .collect(Collectors.toList())
                 .forEach(System.out::println);
